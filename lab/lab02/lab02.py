@@ -78,8 +78,11 @@ def multiple(a, b):
     >>> multiple(14, 21)
     42
     """
-    "*** YOUR CODE HERE ***"
-
+    n = max(a, b)
+    while True:
+        if n % a == 0 and n % b == 0:
+            return n
+        n += 1
 
 
 def cycle(f1, f2, f3):
@@ -108,5 +111,10 @@ def cycle(f1, f2, f3):
     >>> do_two_cycles(1)
     19
     """
-    "*** YOUR CODE HERE ***"
-
+    def g(n):
+        def h(x):
+            if n == 0:
+                return x
+            return cycle(f2, f3, f1)(n-1)(f1(x))
+        return h
+    return g
