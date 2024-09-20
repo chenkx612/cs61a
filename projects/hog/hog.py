@@ -347,13 +347,24 @@ def sus_strategy(score, opponent_score, threshold=11, num_rolls=6):
 
 
 def final_strategy(score, opponent_score):
-    """Write a brief description of your final strategy.
-
-    *** YOUR DESCRIPTION HERE ***
+    """计算投不同骰子数的期望得分，选择期望得分最大的骰子数。
+    如果最大期望得分超过需要的得分，选择期望得分超过需要得分风险最小的骰子数。
+    只在掷0时考虑sus.
+    如果想在其他情形考虑sus，可以考虑用正态分布来近似iid多项分布的和。
     """
-    # BEGIN PROBLEM 12
-    return 6  # Remove this line once implemented.
-    # END PROBLEM 12
+    new_score_0 = sus_points(score + boar_brawl(score, opponent_score))
+    expected_score = [new_score_0 - score]
+    for i in range(1, 11):
+        probility_exist_1 = 1 - (5/6)**i
+        expected_score.append(probility_exist_1 + (1 - probility_exist_1) * 4 * i)
+    if GOAL - score < expected_score[6]:
+        for i in range(6):
+            if expected_score[i] >= GOAL - score:
+                return i
+    if expected_score[6] > expected_score[0]:
+        return 6
+    else:
+        return 0
 
 
 ##########################
