@@ -37,12 +37,15 @@ def has_path(t, p):
     >>> has_path(t1, [3, 4, 5, 6])  # There is no path with these labels
     False
     """
-    if p == label(t):  # when len(p) is 1
+    if len(p) == 1 and p[0] == label(t):  # when len(p) is 1
         return True
     elif label(t) != p[0]:
         return False
     else:
-        return has_path(branches[0], p[1:]) or has_path(branches[0], p[1:])
+        for b in branches(t):
+            if has_path(b, p[1:]):
+                return True
+        return False
 
 
 def find_path(t, x):
@@ -63,7 +66,7 @@ def find_path(t, x):
     if label(t) == x:
         return [x]
     else:
-        for branch in branches:
+        for branch in branches(t):
             path = find_path(branch, x)
             if path:
                 return [label(t)] + path
